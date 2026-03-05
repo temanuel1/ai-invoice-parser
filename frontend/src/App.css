@@ -1,0 +1,223 @@
+/* ── Base ── */
+* {
+  box-sizing: border-box;
+}
+
+.page {
+  min-height: 100vh;
+  background: #f4f5f7;
+  padding: 48px 24px;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  color: #1a1a2e;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.badge-count {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #e5e7eb;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+/* ── Invoice Card ── */
+.invoice-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.invoice-card:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+}
+
+.invoice-card.active {
+  border-color: #818cf8;
+  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.12);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.customer-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.invoice-meta {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.amount-total {
+  text-align: right;
+}
+
+.amount-total .value {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.amount-total .label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+
+.balance-badge {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.balance-badge.outstanding {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.balance-badge.paid {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  transition:
+    background 0.15s ease,
+    transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.chevron.open {
+  background: #eef2ff;
+  transform: rotate(180deg);
+}
+
+.chevron svg {
+  width: 14px;
+  height: 14px;
+  color: #6b7280;
+}
+
+.chevron.open svg {
+  color: #6366f1;
+}
+
+/* ── Payments Panel ── */
+.payments-panel {
+  border-top: 1px solid #f3f4f6;
+  padding: 16px 20px 20px;
+}
+
+.payments-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #9ca3af;
+  margin: 0 0 12px 0;
+}
+
+.payment-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.payment-row:last-child {
+  margin-bottom: 0;
+}
+
+.payment-amount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+.payment-date {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 2px 0 0 0;
+}
+
+.payment-status {
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #9ca3af;
+  font-size: 13px;
+}
