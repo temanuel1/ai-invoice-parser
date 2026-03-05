@@ -9,6 +9,8 @@ import anthropic
 
 load_dotenv()
 
+client = anthropic.Anthropic()
+
 
 class PaymentCreate(BaseModel):
     amount: float
@@ -43,12 +45,11 @@ TOOL_MODELS = {
 
 
 def extract_invoice(description: str) -> InvoiceCreate:
-    client = anthropic.Anthropic()
     response = client.messages.create(
         model="claude-haiku-4-5",
         max_tokens=1024,
         tools=tools,
-        tool_choice={"type": "auto"},
+        tool_choice={"type": "tool", "name": "extract_invoice_data"},
         system="You are an invoice parser. Extract the invoice data from the natural language description of an invoice.",
         messages=[
             {"role": "user", "content": description},
@@ -154,10 +155,10 @@ def create_invoice(invoice: InvoiceCreate):
         )
 
     conn.commit()
-
     cur.close()
     conn.close()
-    return {"message": "Invoice created", "invoice_id": invoice_id}
+
+    return get_invoice(invoice_id)
 
 
 @app.get("/invoices/{id}")
@@ -189,6 +190,7 @@ def get_invoice(id: int):
 
     cur.close()
     conn.close()
+
     return {
         "id": invoice[0],
         "customer_name": invoice[1],
@@ -212,3 +214,40 @@ def get_invoice(id: int):
 def parse_invoice(raw_invoice: InvoiceRawCreate):
     validated_result = extract_invoice(raw_invoice.description)
     return create_invoice(validated_result)
+
+
+@app.post("/invoices/{id}/payments")
+def add_payment(payment: PaymentCreate, id: int):
+    invoice = get_invoice(id)
+
+    if invoice["balance_remaining"] < payment.amount:
+        raise HTTPException(
+            status_code=400, detail="Payment amount exceeds balance remaining"
+        )
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO payments (invoice_id, amount, payment_date, method)
+        VALUES (%s, %s, %s, %s)
+        """,
+        (id, payment.amount, payment.payment_date, payment.method),
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return get_invoice(id)
+
+
+@app.get("/invoices")
+def get_invoices():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id FROM invoices")
+    ids = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+
+    return [get_invoice(id) for id in ids]
